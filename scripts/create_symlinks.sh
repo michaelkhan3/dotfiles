@@ -5,9 +5,9 @@
 
 echo "$1"
 
-backup=0
-if [ "$1" = "--backup" ] ; then
-    backup=1
+backup=1
+if [ "$1" = "--no_backup" ] ; then
+    backup=0
 fi
 
 # Initialize a few things
@@ -53,20 +53,40 @@ link () {
 }
 
 install_tools () {
-	if [ $( echo "$OSTYPE" | grep 'darwin' ) ] ; then
-		echo "This utility will install useful utilities using Homebrew"
-		echo "Proceed? (y/n)"
-		read resp
-		# TODO - regex here?
-		if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-			echo "Installing useful stuff using brew. This may take a while..."
-			sh brew.exclude.sh
-		else
-			echo "Brew installation cancelled by user"
-		fi
-	else
-		echo "Skipping installations using Homebrew because MacOS was not detected..."
-	fi
+    echo "Do you want to install tools? (y/n)"
+    read resp
+
+    if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
+        echo "Installing tools"
+        # z
+        echo "Do you want to install Z? (y/n)"
+        read resp
+        if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
+            echo "dowloading z from https://raw.githubusercontent.com/rupa/z/master/z.sh"
+            cd ~ && wget https://raw.githubusercontent.com/rupa/z/master/z.sh
+        fi
+
+        # fzf
+        echo "Do you want to install fzf? (y/n)"
+        read resp
+        if [ "$resp" = "y" -o "$resp" = "Y" ] ; then
+            echo "Installing fzf with homebrew"
+            brew install fzf
+
+            # To install useful key bindings and fuzzy completion:
+            $(brew --prefix)/opt/fzf/install
+        fi
+
+        # Shellcheck
+        echo "Do you want to install Shellcheck? (y/n)"
+        read resp
+        if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
+            echo "Installing Shellcheck with homebrew"
+            brew install shellcheck
+        fi
+    else
+        echo "Skipping tool installation"
+    fi
 }
 
 # init
