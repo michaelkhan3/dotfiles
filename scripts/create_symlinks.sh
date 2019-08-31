@@ -91,4 +91,4 @@ install_tools () {
 
 # init
 link
-# install_tools
+install_tools
