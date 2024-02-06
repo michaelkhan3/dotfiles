@@ -1,94 +1,71 @@
 #!/bin/sh
+set -e
 
-# TODO - Change this to work for my repo
-# TODO - decide between symlink or rsync 
+BACKUP_FOLDER="$HOME/.dotfiles_backup"
+
+datetime_string=$(date +%Y%m%d_%H%M%S)
+
 
 echo "$1"
 
+# backup is on by default
 backup=1
-if [ "$1" = "--no_backup" ] ; then
+
+# check if --no-backup flag was passed
+if [ "$1" = "--no-backup" ] ; then
     backup=0
+    echo "Running with --no-backup."
+    echo "I hope you know what you're doing. Do you want to proceed? (y/n)"
+    read -r resp
+
+    # If response is NOT y or Y cancel
+    if ! [ "$resp" = 'y' ] || [ "$resp" = 'Y' ]; then
+        echo "User decided to abort!"
+        exit 0
+    fi
 fi
 
-# Initialize a few things
-init () {
-	echo "Making a Projects folder in $PATH_TO_PROJECTS if it doesn't already exist"
-	mkdir -p "$PATH_TO_PROJECTS"
-	echo "Making a Playground folder in $PATH_TO_PLAYGROUND if it doesn't already exist"
-	mkdir -p "$PATH_TO_PLAYGROUND"
-}
-
-# TODO : Delete symlinks to deleted files
-# Is this where rsync shines?
-# TODO - add support for -f and --force
-link () {
-	echo "This utility will symlink the files in this repo to the home directory"
-	echo "Proceed? (y/n)"
-	read resp
-
-    echo "$backup"
-
-	# TODO - regex here?
-	if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-        # If the backup option is set create a backup of each of the dotfiles to nbe replaced
-        if [ backup ]; then
-            echo "Backing up original dotfiles"
-            for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|.*.md|scripts' ) ; do
-                mv ~/$(file) ~/$(file).orig
-                # mv ../testing_dotfiles/"$file" ../testing_dotfiles/"$file".orig
-            done
-        fi
-        # Create symlinks
-		for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|.*.md|scripts' ) ; do
-			ln -sv "$PWD/$file" "$HOME"
-			# ln -sv "$PWD/$file" "$PWD/../testing_dotfiles"
-
-		done
-		# TODO: source files here?
-		echo "Symlinking complete"
-	else
-		echo "Symlinking cancelled by user"
-		return 1
-	fi
-}
-
-install_tools () {
-    echo "Do you want to install tools? (y/n)"
-    read resp
-
-    if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-        echo "Installing tools"
-        # z
-        echo "Do you want to install Z? (y/n)"
-        read resp
-        if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-            echo "dowloading z from https://raw.githubusercontent.com/rupa/z/master/z.sh"
-            cd ~ && wget https://raw.githubusercontent.com/rupa/z/master/z.sh
-        fi
-
-        # fzf
-        echo "Do you want to install fzf? (y/n)"
-        read resp
-        if [ "$resp" = "y" -o "$resp" = "Y" ] ; then
-            echo "Installing fzf with homebrew"
-            brew install fzf
-
-            # To install useful key bindings and fuzzy completion:
-            $(brew --prefix)/opt/fzf/install
-        fi
-
-        # Shellcheck
-        echo "Do you want to install Shellcheck? (y/n)"
-        read resp
-        if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-            echo "Installing Shellcheck with homebrew"
-            brew install shellcheck
-        fi
-    else
-        echo "Skipping tool installation"
+make_backup_folder () {
+    if [ ! -d "$BACKUP_FOLDER" ]; then
+        echo "Creating backup folder '$BACKUP_FOLDER'"
+        mkdir "$BACKUP_FOLDER"
     fi
+
+    echo "Creating backup folder '$BACKUP_FOLDER/$datetime_string'"
+    mkdir "$BACKUP_FOLDER"/"$datetime_string"
 }
+
+link () {
+    file_to_link="$1"
+
+    if [ -f "$HOME/$file_to_link" ]; then
+        echo "File $HOME/$file_to_link already exist."
+        if [ "$backup" ]; then
+            cp "$HOME/$file_to_link" "$BACKUP_FOLDER/$datetime_string/$file_to_link"
+            echo "backed up $HOME/$file_to_link to $BACKUP_FOLDER/$datetime_string/$file_to_link"
+        fi
+
+        # remove current file
+        echo "Removing existing $HOME/$file_to_link"
+        rm "$HOME/$file_to_link"
+    fi
+
+    # link file from repo to home directory
+    ln -sv "$PWD/$file_to_link" "$HOME/$file_to_link"
+    echo "Linked $PWD/$file_to_link to $HOME/$file_to_link"
+}
+
 
 # init
-link
-install_tools
+if [ "$backup" ]; then
+    make_backup_folder
+fi
+
+# Loop over dotfiles specified in this repo and link each of them.
+# TODO - Update this list if extra files are added
+for f in $PWD/{Brewfile,.gitconfig,.p10k.zsh,.zprofile,.zshrc}
+do
+    file_name="${f##*/}"
+    echo "Processing File - $file_name"
+    link "$file_name"
+done
