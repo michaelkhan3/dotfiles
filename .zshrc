@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git kubectl gcloud)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -123,3 +123,5 @@ pyenv virtualenvwrapper_lazy
 # MK gcloud setup
 source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+# Created by `pipx` on 2024-03-18 00:46:55
+export PATH="$PATH:/Users/michaelkhan/.local/bin"
