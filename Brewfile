@@ -6,6 +6,9 @@ brew 'mas' # Command line tools for app store https://github.com/mas-cli/mas
 # Company Tools
 # mas 'Slack', id: 803453959 # will fail on first install, apps must be 'purchased' manually first
 
+# Window manager
+# mas "Magnet", id: 441258766
+
 # Source control
 brew 'git'
 
@@ -41,6 +44,22 @@ brew "xz"
 brew "tcl-tk"
 brew "zlib"
 
+# AI Tools
+brew "ollama"
+
+#Databases
+brew "duckdb"
+cask "snowflake-snowsql"
+
 # Cloud
 ## Google Cloud SDK
 cask "google-cloud-sdk"
+
+
+# VSCode
+vscode "hashicorp.terraform"
+vscode "ms-python.autopep8"
+vscode "ms-python.debugpy"
+vscode "ms-python.pylint"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
