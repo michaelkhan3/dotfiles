@@ -53,6 +53,12 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 brew bundle install 
 ```
 
+### Font Setup 🔠
+
+This step may not be required but if your terminal is looking a bit strange with `?` characters, then you may be missing the required fronts.
+
+Follow the instructions in this [Readme](https://github.com/romkatv/powerlevel10k/blob/master/font.md#automatic-font-installation) to properly setup the required front for Powerlevel10k
+
 
 
 ## References
