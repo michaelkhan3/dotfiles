@@ -4,10 +4,10 @@ tap "hashicorp/tap" # To install Hashicorp apps
 brew 'mas' # Command line tools for app store https://github.com/mas-cli/mas
 
 # Company Tools
-# mas 'Slack', id: 803453959 # will fail on first install, apps must be 'purchased' manually first
+ mas 'Slack', id: 803453959 # will fail on first install, apps must be 'purchased' manually first
 
 # Window manager
-# mas "Magnet", id: 441258766
+ mas "Magnet", id: 441258766
 
 # Source control
 brew 'git'
