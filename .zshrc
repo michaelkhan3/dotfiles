@@ -125,3 +125,6 @@ source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 # Created by `pipx` on 2024-03-18 00:46:55
 export PATH="$PATH:/Users/michaelkhan/.local/bin"
+
+# MK zoxide setup
+eval "$(zoxide init zsh)"

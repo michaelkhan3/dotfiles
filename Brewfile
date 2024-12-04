@@ -3,7 +3,7 @@ tap "hashicorp/tap" # To install Hashicorp apps
 
 brew 'mas' # Command line tools for app store https://github.com/mas-cli/mas
 
-# Company Tools
+# Communication Tools
  mas 'Slack', id: 803453959 # will fail on first install, apps must be 'purchased' manually first
 
 # Window manager
@@ -11,6 +11,7 @@ brew 'mas' # Command line tools for app store https://github.com/mas-cli/mas
 
 # Source control
 brew 'git'
+cask "github" # Github Desktop client
 
 # Browsers
 cask 'google-chrome'
@@ -23,7 +24,6 @@ cask 'docker'
 
 # Dev tools
 cask "visual-studio-code" # VS Code 
-cask "github" # Github Desktop client
 brew "shellcheck" # static code analysis for shell scripts 
 vscode "timonwong.shellcheck" # shellcheck vscode plugin
 brew "hashicorp/tap/terraform" # Terraform
@@ -54,6 +54,9 @@ cask "snowflake-snowsql"
 # Cloud
 ## Google Cloud SDK
 cask "google-cloud-sdk"
+
+# Terminal tools
+brew "zoxide"
 
 
 # VSCode
